@@ -4,6 +4,7 @@ on:
     push:
       branches:
         - abraham
+        - main
   
 permissions:
     contents: write

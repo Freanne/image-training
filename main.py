@@ -5,7 +5,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 logging.info("Importing required libraries.")
 
-import numpy as np
 import keras
 from keras import layers
 from tensorflow import data as tf_data
@@ -64,6 +63,17 @@ val_size = tf_data.experimental.cardinality(val_ds).numpy()
 
 logging.info(f"Number of images in training dataset: {train_size * batch_size}")
 logging.info(f"Number of images in validation dataset: {val_size * batch_size}")
+
+logging.info("Counting the number of images per class in the training dataset.")
+class_counts = {}
+for _, labels in train_ds.unbatch():
+    class_idx = tf.argmax(labels).numpy()
+    if class_idx in class_counts:
+        class_counts[class_idx] += 1
+    else:
+        class_counts[class_idx] = 1
+
+logging.info(f"Number of images per class in the training dataset: {class_counts}")
 
 def make_model(input_shape, num_classes):
     logging.info("Building the model.")
@@ -137,8 +147,8 @@ history = model.fit(
 
 logging.info("Plotting the learning curve.")
 plt.figure(figsize=(12, 8))
-plt.plot(history.history['acc'], label='Training Accuracy')
-plt.plot(history.history['val_acc'], label='Validation Accuracy')
+plt.plot(history.history['acc']*100, label='Training Accuracy')
+plt.plot(history.history['val_acc']*100, label='Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.title('Learning Curve')
@@ -154,13 +164,13 @@ val_pred_labels = tf.argmax(val_predictions, axis=1)
 
 logging.info("Getting true labels from the validation dataset.")
 val_true_labels = tf.concat([tf.argmax(y, axis=1) for x, y in val_ds], axis=0)
-
+val_true_labels = tf.concat([tf.argmax(y, axis=1) for _, y in val_ds], axis=0)
 logging.info("Computing the confusion matrix.")
 val_cm = confusion_matrix(val_true_labels, val_pred_labels)
 
 logging.info("Plotting the confusion matrix.")
 plt.figure(figsize=(10, 8))
-disp = ConfusionMatrixDisplay(confusion_matrix=val_cm)
+disp = ConfusionMatrixDisplay(confusion_matrix=val_cm, display_labels=[0, 1, 2, "other"])
 disp.plot(cmap=plt.cm.Blues, ax=plt.gca())
 plt.title('Confusion Matrix - Validation Set')
 plt.savefig('artefacts/confusion_matrix.png')
