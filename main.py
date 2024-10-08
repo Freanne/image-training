@@ -19,8 +19,8 @@ logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
 
 image_size = (224, 224)
-batch_size = 32
-epochs = 50
+batch_size = 64
+epochs = 5
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
@@ -273,7 +273,7 @@ for i, model_fn in enumerate(models):
         keras.callbacks.ModelCheckpoint(
             f"artefacts/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
         ),
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=2, restore_best_weights=True),
         keras.callbacks.CSVLogger(f'artefacts/training_log_{i+1}.csv')  # Save training log
     ]
 
