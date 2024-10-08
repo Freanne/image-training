@@ -24,7 +24,7 @@ epochs = 50
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
-    "img",
+    "data",
     validation_split=0.2,
     subset="both",
     seed=1337,
@@ -273,7 +273,7 @@ for i, model_fn in enumerate(models):
         keras.callbacks.ModelCheckpoint(
             f"artefacts/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
         ),
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True),
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
         keras.callbacks.CSVLogger(f'artefacts/training_log_{i+1}.csv')  # Save training log
     ]
 
