@@ -30,7 +30,7 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
     seed=1337,
     image_size=image_size,
     batch_size=batch_size,
-    label_mode='sparse'
+    label_mode='int'
 )
 
 logging.info("Setting up data augmentation layers.")
