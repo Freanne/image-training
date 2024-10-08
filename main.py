@@ -311,7 +311,8 @@ for i, model_fn in enumerate(models):
 
     logging.info(f"Plotting the confusion matrix for Model {i+1}.")
     plt.figure(figsize=(10, 8))
-    disp = ConfusionMatrixDisplay(confusion_matrix=val_cm, display_labels=[0, 1, 2, "other"])
+    class_labels = sorted(set(val_true_labels.numpy()))
+    disp = ConfusionMatrixDisplay(confusion_matrix=val_cm, display_labels=class_labels)
     disp.plot(cmap=plt.cm.Blues, ax=plt.gca())
     plt.title(f'Confusion Matrix - Validation Set - Model {i+1}')
     plt.savefig(f'artefacts/confusion_matrix_{i+1}.png')
