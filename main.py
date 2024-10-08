@@ -304,8 +304,7 @@ for i, model_fn in enumerate(models):
     val_pred_labels = tf.argmax(val_predictions, axis=1)
 
     logging.info(f"Getting true labels from the validation dataset for Model {i+1}.")
-    val_true_labels = tf.concat([tf.argmax(y, axis=1) for x, y in val_ds], axis=0)
-    val_true_labels = tf.concat([tf.argmax(y, axis=1) for _, y in val_ds], axis=0)
+    val_true_labels = tf.concat([y for _, y in val_ds], axis=0)
 
     logging.info(f"Computing the confusion matrix for Model {i+1}.")
     val_cm = confusion_matrix(val_true_labels, val_pred_labels)
