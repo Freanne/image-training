@@ -9,7 +9,7 @@ permissions:
     contents: write
   
 jobs:
-    train_model:
+    train-model:
       runs-on: ubuntu-latest
   
       steps:
@@ -34,7 +34,7 @@ jobs:
           id: create_release
           uses: actions/create-release@latest
           with:
-            tag_name: Training Models_${{ github.run_number }}_${{ github.run_attempt }}
+            tag_name: training-models_${{ github.run_number }}_${{ github.run_attempt }}
             release_name: Model
             body: |
               Changes in this Release:
@@ -48,7 +48,7 @@ jobs:
           uses: actions/upload-release-asset@v1
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: artefacts.zip
+            asset_path: ./artefacts.zip
             asset_name: artefacts.zip
             asset_content_type: application/octet-stream
           env:
