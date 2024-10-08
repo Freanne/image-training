@@ -118,7 +118,7 @@ logging.info("Compiling the model.")
 model.compile(
     optimizer=keras.optimizers.Adam(3e-4),
     loss=keras.losses.CategoricalCrossentropy(from_logits=True),
-    metrics=[keras.metrics.BinaryAccuracy(name="acc")],
+    metrics=[keras.metrics.CategoricalAccuracy(name="acc")],
 )
 
 callbacks = [
