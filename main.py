@@ -19,9 +19,9 @@ import shutil
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
 
-image_size = (360, 360)
-batch_size = 10
-epochs = 2
+image_size = (180, 180)
+batch_size = 20
+epochs = 100
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
