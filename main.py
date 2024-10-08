@@ -71,8 +71,8 @@ for _, labels in train_ds.unbatch():
 
 logging.info(f"Number of images per class in the training dataset: {class_counts}")
 
-class_weights = class_weight.compute_class_weight('balanced', classes=np.unique(train_ds.classes), y=train_ds.classes)
-class_weights = dict(enumerate(class_weights))
+total_images = sum(class_counts.values())
+class_weights = {class_idx: total_images / (len(class_counts) * count) for class_idx, count in class_counts.items()}
 
 def create_model_1(input_shape, num_classes):
     logging.info("Building Model 1.")
