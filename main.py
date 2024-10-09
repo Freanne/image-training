@@ -54,10 +54,12 @@ def data_augmentation(images):
     return images
 
 logging.info("Applying data augmentation to training dataset.")
-train_ds = train_ds.map(
-    lambda img, label: (data_augmentation(img), label),
-    num_parallel_calls=tf_data.AUTOTUNE,
-)
+def apply_data_augmentation(img, label):
+    return data_augmentation(img), label
+
+#logging.info("Applying data augmentation to training dataset.")
+train_ds = train_ds.map(apply_data_augmentation, num_parallel_calls=tf_data.AUTOTUNE)
+
 
 logging.info("Prefetching training and validation datasets.")
 train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
