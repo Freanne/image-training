@@ -93,13 +93,16 @@ def create_model_0(input_shape, num_classes):
     return model
     
 def create_model_0_1(input_shape, num_classes):
-    inputs = layers.Input(shape=input_shape ) # Input layer
+    logging.info("Building Model 0_1 - EfficientNetB0 with pretrained weights.")
+    inputs = layers.Input(shape=input_shape)  # Input layer
     model = EfficientNetB0(include_top=False, input_tensor=inputs, weights="imagenet")
 
     # Freeze the pretrained weights
+    logging.info("Freezing the pretrained weights.")
     model.trainable = False
 
     # Rebuild top
+    logging.info("Rebuilding the top layers.")
     x = layers.GlobalAveragePooling2D(name="avg_pool")(model.output)
     x = layers.BatchNormalization()(x)
 
@@ -108,6 +111,7 @@ def create_model_0_1(input_shape, num_classes):
     outputs = layers.Dense(num_classes, activation="softmax", name="pred")(x)
 
     # Compile
+    logging.info("Compiling the model.")
     model = keras.Model(inputs, outputs, name="EfficientNet")
     optimizer = keras.optimizers.Adam(learning_rate=1e-2)
     model.compile(
