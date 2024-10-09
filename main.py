@@ -88,7 +88,7 @@ def create_model_0(input_shape, num_classes):
         include_top=True,
         weights=None,
         classes=num_classes,
-        input_shape=input_shape + (3,)
+        input_shape=input_shape
     )
     return model
     
