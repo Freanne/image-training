@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logging.info("Importing required libraries.")
 import keras
 from keras import layers
+from keras import ops
 from tensorflow import data as tf_data
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
@@ -38,7 +39,7 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
 
 logging.info("Setting up data augmentation layers.")
 data_augmentation_layers = [
-    layers.Resizing(image_size, image_size),
+    layers.Resizing(image_size[0], image_size[1]),
     layers.RandomFlip("horizontal"),
     layers.Normalization(),
     layers.RandomRotation(0.2),
