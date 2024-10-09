@@ -324,7 +324,7 @@ for i, model_fn in enumerate(models):
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            f"artefacts/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
+            f"models/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
         ),
         keras.callbacks.EarlyStopping(monitor='val_acc', patience=5, restore_best_weights=True),
         keras.callbacks.CSVLogger(f'artefacts/training_log_{i+1}.csv')  # Save training log
@@ -375,8 +375,8 @@ for i, model_fn in enumerate(models):
     plt.close()
 
     logging.info(f"Saving model weights for Model {i+1}.")
-    model.save_weights(f'artefacts/model_weights_{i+1}.weights.h5')
-    model.save_weights(f'models/model_{i+1}.weights.h5')
+    model.save_weights(f'models/model_weights_{i+1}.weights.h5')
+    #model.save_weights(f'models/model_{i+1}.weights.h5')
 
 logging.info("Creating a zip archive of the artefacts directory.")
 shutil.make_archive('artefacts', 'zip', 'artefacts')
