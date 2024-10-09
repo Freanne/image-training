@@ -87,7 +87,7 @@ for _, labels in train_ds.unbatch():
 logging.info(f"Number of images per class in the training dataset: {class_counts}")
 
 class_labels = [f"Class {i}" for i in range(len(class_counts))]
-class_names = train_ds.class_names
+class_names = sorted(os.listdir("data"))
 print(class_names)
 logging.info(f"Class names: {class_names}")
 
