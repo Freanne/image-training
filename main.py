@@ -311,7 +311,7 @@ for i, model_fn in enumerate(models):
     logging.info(f"Compiling Model {i+1}.")
     model.compile(
         optimizer=keras.optimizers.Adam(3e-4),
-        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=False),
         metrics=[keras.metrics.SparseCategoricalAccuracy(name="acc")],
     )
 
