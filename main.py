@@ -38,9 +38,7 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
 
 logging.info("Setting up data augmentation layers.")
 data_augmentation_layers = [
-    layers.Resizing(image_size[0], image_size[1]),
     layers.RandomFlip("horizontal"),
-    layers.Normalization(),
     layers.RandomRotation(0.2),
     layers.RandomRotation(factor=0.15),
     layers.RandomTranslation(height_factor=0.1, width_factor=0.1),
