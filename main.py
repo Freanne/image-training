@@ -24,7 +24,7 @@ os.makedirs("models", exist_ok=True)
 os.makedirs("graphs", exist_ok=True)
 image_size = ( 260 , 260 )
 batch_size = 128
-epochs = 10
+epochs = 5
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
@@ -380,3 +380,5 @@ for i, model_fn in enumerate(models):
 
 logging.info("Creating a zip archive of the artefacts directory.")
 shutil.make_archive('artefacts', 'zip', 'artefacts')
+shutil.make_archive('models', 'zip', 'models')
+shutil.make_archive('graphs', 'zip', 'graphs')
