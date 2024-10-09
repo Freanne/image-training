@@ -159,39 +159,44 @@ def create_model_3(input_shape, num_classes):
     logging.info("Building Model 3 - ResNet-Like Model.")
     inputs = keras.Input(shape=input_shape)
 
+    # Entry block
     x = layers.Rescaling(1.0 / 255)(inputs)
-    
-    # Initial convolution block
-    x = layers.Conv2D(64, 7, strides=2, padding="same")(x)
+    x = layers.Conv2D(128, 3, strides=2, padding="same")(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
-
-    # Residual block 1
-    residual = layers.Conv2D(128, 1, strides=2, padding="same")(x)
-    x = layers.Conv2D(128, 3, padding="same")(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(128, 3, padding="same")(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.add([x, residual])
     x = layers.Activation("relu")(x)
 
-    # Residual block 2
-    residual = layers.Conv2D(256, 1, strides=2, padding="same")(x)
-    x = layers.Conv2D(256, 3, padding="same")(x)
+    previous_block_activation = x  # Set aside residual
+
+    for size in [256, 512, 728]:
+        x = layers.Activation("relu")(x)
+        x = layers.SeparableConv2D(size, 3, padding="same")(x)
+        x = layers.BatchNormalization()(x)
+
+        x = layers.Activation("relu")(x)
+        x = layers.SeparableConv2D(size, 3, padding="same")(x)
+        x = layers.BatchNormalization()(x)
+
+        x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
+
+        # Project residual
+        residual = layers.Conv2D(size, 1, strides=2, padding="same")(previous_block_activation)
+        residual = layers.BatchNormalization()(residual)  # Ensure batch normalization is applied to the residual
+
+        x = layers.add([x, residual])  # Add back residual
+        previous_block_activation = x  # Set aside next residual
+
+    x = layers.SeparableConv2D(1024, 3, padding="same")(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(256, 3, padding="same")(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.add([x, residual])
     x = layers.Activation("relu")(x)
 
-    # Global pooling and output
     x = layers.GlobalAveragePooling2D()(x)
-    x = layers.Dropout(0.3)(x)
-    outputs = layers.Dense(num_classes, activation="softmax")(x)
+    if num_classes == 2:
+        units = 1
+    else:
+        units = num_classes
 
+    x = layers.Dropout(0.25)(x)
+    outputs = layers.Dense(units, activation=None)(x)
     return keras.Model(inputs, outputs)
 
 
@@ -256,7 +261,7 @@ def create_model_6(input_shape, num_classes):
 
     return keras.Model(inputs, outputs)
 
-models = [create_model_1, create_model_2, create_model_3, create_model_4, create_model_5, create_model_6]
+models = [create_model_3, create_model_4,create_model_5, create_model_6, create_model_1, create_model_2]
 
 for i, model_fn in enumerate(models):
     logging.info(f"Creating Model {i+1}.")
