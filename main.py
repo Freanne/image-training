@@ -21,9 +21,9 @@ from tensorflow.keras.applications import EfficientNetB0
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
 
-image_size = (64, 64)
+image_size = ( 64*2 , 64*2 )
 batch_size = 128
-epochs = 1
+epochs = 5
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
