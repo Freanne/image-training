@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logging.info("Importing required libraries.")
 import keras
 from keras import layers
-from keras import ops
 from tensorflow import data as tf_data
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
@@ -49,9 +48,8 @@ data_augmentation_layers = [
     layers.RandomContrast(factor=0.1)
 ]
 
-@tf.function
 def data_augmentation(images):
-    for layer in data_augmentation_layers:
+    for layer in data_augmentation_layers :
         images = layer(images)
     return images
 
