@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import shutil
 from sklearn.utils import class_weight
+from tensorflow.keras.applications import EfficientNetB0
+
+
 
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
@@ -36,7 +39,11 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
 logging.info("Setting up data augmentation layers.")
 data_augmentation_layers = [
     layers.RandomFlip("horizontal"),
-    layers.RandomRotation(0.2)
+    layers.RandomRotation(0.2),
+    layers.RandomRotation(factor=0.15),
+    layers.RandomTranslation(height_factor=0.1, width_factor=0.1),
+    layers.RandomFlip(),
+    layers.RandomContrast(factor=0.1)
 ]
 
 def data_augmentation(images):
@@ -73,6 +80,40 @@ logging.info(f"Number of images per class in the training dataset: {class_counts
 
 total_images = sum(class_counts.values())
 class_weights = {class_idx: total_images / (len(class_counts) * count) for class_idx, count in class_counts.items()}
+
+
+def create_model_0(input_shape, num_classes):
+    logging.info("Building Model 0 - EfficientNetB0.")
+    model = EfficientNetB0(
+        include_top=True,
+        weights=None,
+        classes=num_classes,
+        input_shape=input_shape + (3,)
+    )
+    return model
+    
+def create_model_0_1(input_shape, num_classes):
+    inputs = layers.Input(shape=input_shape + (3,)) # Input layer
+    model = EfficientNetB0(include_top=False, input_tensor=inputs, weights="imagenet")
+
+    # Freeze the pretrained weights
+    model.trainable = False
+
+    # Rebuild top
+    x = layers.GlobalAveragePooling2D(name="avg_pool")(model.output)
+    x = layers.BatchNormalization()(x)
+
+    top_dropout_rate = 0.2
+    x = layers.Dropout(top_dropout_rate, name="top_dropout")(x)
+    outputs = layers.Dense(num_classes, activation="softmax", name="pred")(x)
+
+    # Compile
+    model = keras.Model(inputs, outputs, name="EfficientNet")
+    optimizer = keras.optimizers.Adam(learning_rate=1e-2)
+    model.compile(
+        optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"]
+    )
+    return model
 
 def create_model_1(input_shape, num_classes):
     logging.info("Building Model 1.")
@@ -261,7 +302,7 @@ def create_model_6(input_shape, num_classes):
 
     return keras.Model(inputs, outputs)
 
-models = [create_model_1, create_model_2, create_model_3, create_model_4, create_model_5, create_model_6]
+models = [create_model_0, create_model_0_1, create_model_1, create_model_2, create_model_3, create_model_4, create_model_5, create_model_6]
 
 for i, model_fn in enumerate(models):
     logging.info(f"Creating Model {i+1}.")
