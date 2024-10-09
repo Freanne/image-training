@@ -23,7 +23,7 @@ os.makedirs("artefacts", exist_ok=True)
 os.makedirs("models", exist_ok=True)
 os.makedirs("graphs", exist_ok=True)
 image_size = ( 260 , 260 )
-batch_size = 128
+batch_size = 64
 epochs = 1
 
 logging.info("Loading dataset from directory.")
