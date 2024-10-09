@@ -49,6 +49,7 @@ data_augmentation_layers = [
     layers.RandomContrast(factor=0.1)
 ]
 
+@tf.function
 def data_augmentation(images):
     for layer in data_augmentation_layers:
         images = layer(images)
