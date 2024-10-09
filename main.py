@@ -20,7 +20,8 @@ from tensorflow.keras.applications import EfficientNetB0
 
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
-
+os.makedirs("models", exist_ok=True)
+os.makedirs("graphs", exist_ok=True)
 image_size = ( 260 , 260 )
 batch_size = 128
 epochs = 10
@@ -349,6 +350,7 @@ for i, model_fn in enumerate(models):
     plt.grid(True)
 
     plt.savefig(f'artefacts/learning_curve_{i+1}.png')
+    plt.savefig(f'graphs/learning_curve_{i+1}.png')
     plt.close()
 
     logging.info(f"Making predictions on the validation dataset for Model {i+1}.")
@@ -368,11 +370,13 @@ for i, model_fn in enumerate(models):
     disp.plot(cmap=plt.cm.Blues, ax=plt.gca())
     plt.title(f'Confusion Matrix - Validation Set - Model {i+1}')
     plt.savefig(f'artefacts/confusion_matrix_{i+1}.png')
+    plt.savefig(f'graphs/confusion_matrix_{i+1}.png')
 
     plt.close()
 
     logging.info(f"Saving model weights for Model {i+1}.")
     model.save_weights(f'artefacts/model_weights_{i+1}.weights.h5')
+    model.save_weights(f'models/model_{i+1}.weights.h5')
 
 logging.info("Creating a zip archive of the artefacts directory.")
 shutil.make_archive('artefacts', 'zip', 'artefacts')
