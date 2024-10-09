@@ -13,7 +13,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import shutil
-from sklearn.utils import class_weight
+# from sklearn.utils import class_weight
 from tensorflow.keras.applications import EfficientNetB0
 
 
@@ -24,7 +24,7 @@ os.makedirs("models", exist_ok=True)
 os.makedirs("graphs", exist_ok=True)
 image_size = ( 260 , 260 )
 batch_size = 64
-epochs = 1
+epochs = 8
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
