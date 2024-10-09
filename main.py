@@ -18,7 +18,7 @@ from sklearn.utils import class_weight
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
 
-image_size = (224, 224)
+image_size = (64, 64)
 batch_size = 128
 epochs = 1
 
