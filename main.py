@@ -87,6 +87,9 @@ for _, labels in train_ds.unbatch():
 logging.info(f"Number of images per class in the training dataset: {class_counts}")
 
 class_labels = [f"Class {i}" for i in range(len(class_counts))]
+class_names = train_ds.class_names
+print(class_names)
+logging.info(f"Class names: {class_names}")
 
 total_images = sum(class_counts.values())
 class_weights = {class_idx: total_images / (len(class_counts) * count) for class_idx, count in class_counts.items()}
@@ -399,8 +402,8 @@ for i, model_fn in enumerate(models):
     val_cm = confusion_matrix(val_true_labels, val_pred_labels)
 
     logging.info(f"Plotting the confusion matrix for Model {i+1}.")
-    plot_confusion_matrix(val_cm, class_labels, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'artefacts/confusion_matrix_{i+1}.png')
-    plot_confusion_matrix(val_cm, class_labels, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'graphs/confusion_matrix_{i+1}.png')
+    plot_confusion_matrix(val_cm, class_names, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'artefacts/confusion_matrix_{i+1}.png')
+    plot_confusion_matrix(val_cm, class_names, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'graphs/confusion_matrix_{i+1}.png')
 
     logging.info(f"Saving model weights for Model {i+1}.")
     model.save_weights(f'models/model_weights_{i+1}.weights.h5')
