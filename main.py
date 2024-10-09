@@ -28,7 +28,7 @@ epochs = 5
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
     "data",
-    validation_split=0.2,
+    validation_split=0.25,
     subset="both",
     seed=1337,
     image_size=image_size,
