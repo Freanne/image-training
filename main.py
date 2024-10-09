@@ -261,7 +261,7 @@ def create_model_6(input_shape, num_classes):
 
     return keras.Model(inputs, outputs)
 
-models = [create_model_3, create_model_4,create_model_5, create_model_6, create_model_1, create_model_2]
+models = [create_model_1, create_model_2, create_model_3, create_model_4, create_model_5, create_model_6]
 
 for i, model_fn in enumerate(models):
     logging.info(f"Creating Model {i+1}.")
