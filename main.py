@@ -93,7 +93,7 @@ def create_model_0(input_shape, num_classes):
     return model
     
 def create_model_0_1(input_shape, num_classes):
-    inputs = layers.Input(shape=input_shape + (3,)) # Input layer
+    inputs = layers.Input(shape=input_shape ) # Input layer
     model = EfficientNetB0(include_top=False, input_tensor=inputs, weights="imagenet")
 
     # Freeze the pretrained weights
