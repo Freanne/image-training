@@ -341,8 +341,8 @@ for i, model_fn in enumerate(models):
 
     logging.info(f"Plotting the learning curve for Model {i+1}.")
     plt.figure(figsize=(12, 8))
-    plt.plot(history.history['acc']*100, label='Training Accuracy')
-    plt.plot(history.history['val_acc']*100, label='Validation Accuracy')
+    plt.plot(history.history['acc'], label='Training Accuracy')
+    plt.plot(history.history['val_acc'], label='Validation Accuracy')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.title(f'Learning Curve - Model {i+1}')
