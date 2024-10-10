@@ -1,4 +1,5 @@
 import os
+import shutil
 import logging
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
@@ -17,7 +18,7 @@ def load_best_model():
     global model
     try:
         logging.info("Loading the best model.")
-        model = keras.models.load_model("models/best_model_1.keras")
+        model = keras.models.load_model("models/best_model.keras")
     except Exception as e:
         logging.error(f"Error loading model: {e}")
         raise
