@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM python:3.10-slim AS builder
+FROM python:3.10.6-alpine AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -12,14 +12,14 @@ WORKDIR /app
 # Install the dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
 COPY app.py /app
 COPY models/ /app/models
 
 # Stage 2: Runtime stage
-FROM python:3.10-slim
+FROM python:3.10.6-alpine
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
