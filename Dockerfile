@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM python:3.10.6-alpine AS builder
+FROM python:3.10-alpine AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -19,7 +19,7 @@ COPY app.py /app
 COPY models/ /app/models
 
 # Stage 2: Runtime stage
-FROM python:3.10.6-alpine
+FROM python:3.10-alpine
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
