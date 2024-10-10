@@ -10,10 +10,10 @@ WORKDIR /app
 
 
 # Install the dependencies
-COPY requirements.txt .
+COPY requirements-api.txt .
 RUN pip install --no-cache-dir --upgrade pip
-RUN pip install -U jax
-RUN pip install  -r requirements.txt
+
+RUN pip install --no-cache-dir  -r requirements-api.txt
 
 # Copy the rest of the application code
 COPY app.py /app

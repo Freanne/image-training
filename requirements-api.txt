@@ -1,0 +1,10 @@
+opencv-python 
+numpy 
+pandas
+keras
+tensorflow
+matplotlib
+seaborn
+fastapi
+uvicorn
+python-multipart
