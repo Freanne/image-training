@@ -13,17 +13,23 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import shutil
-from sklearn.utils import class_weight
+# from sklearn.utils import class_weight
 from tensorflow.keras.applications import EfficientNetB0
+
+import itertools
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 
 logging.info("Creating artefacts directory if it doesn't exist.")
 os.makedirs("artefacts", exist_ok=True)
-
-image_size = ( 64*2 , 64*2 )
-batch_size = 128
-epochs = 5
+os.makedirs("models", exist_ok=True)
+os.makedirs("graphs", exist_ok=True)
+image_size = ( 260 , 260 )
+batch_size = 64
+epochs = 50
 
 logging.info("Loading dataset from directory.")
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
@@ -79,6 +85,11 @@ for _, labels in train_ds.unbatch():
         class_counts[class_idx] = 1
 
 logging.info(f"Number of images per class in the training dataset: {class_counts}")
+
+class_labels = [f"Class {i}" for i in range(len(class_counts))]
+class_names = sorted(os.listdir("data"))
+print(class_names)
+logging.info(f"Class names: {class_names}")
 
 total_images = sum(class_counts.values())
 class_weights = {class_idx: total_images / (len(class_counts) * count) for class_idx, count in class_counts.items()}
@@ -308,7 +319,36 @@ def create_model_6(input_shape, num_classes):
 
     return keras.Model(inputs, outputs)
 
-models = [create_model_0, create_model_0_1, create_model_1, create_model_2, create_model_3, create_model_4, create_model_5, create_model_6]
+def plot_confusion_matrix(cm, class_names, title='Confusion matrix', cmap=plt.cm.Blues, file_name='confusion_matrix.png'):
+    plt.figure(figsize=(10, 10))
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+
+    tick_marks = np.arange(len(class_names))
+    plt.xticks(tick_marks, class_names, rotation=45)
+    plt.yticks(tick_marks, class_names)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, f'{cm[i, j]} ({100 * cm[i, j] / cm[i, :].sum():.2f}%)',
+                 horizontalalignment="center", verticalalignment='bottom',
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.savefig(file_name)
+    
+    
+models = [
+    #create_model_0, 
+    create_model_0_1, 
+    #create_model_1, 
+    #create_model_2, 
+    #create_model_3, create_model_4, create_model_5, 
+    #create_model_6
+    ]
 
 for i, model_fn in enumerate(models):
     logging.info(f"Creating Model {i+1}.")
@@ -323,9 +363,9 @@ for i, model_fn in enumerate(models):
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            f"artefacts/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
+            f"models/best_model_{i+1}.keras", save_best_only=True, monitor="val_acc", mode="max"
         ),
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=2, restore_best_weights=True),
+        keras.callbacks.EarlyStopping(monitor='val_acc', patience=5, restore_best_weights=True),
         keras.callbacks.CSVLogger(f'artefacts/training_log_{i+1}.csv')  # Save training log
     ]
 
@@ -340,15 +380,16 @@ for i, model_fn in enumerate(models):
 
     logging.info(f"Plotting the learning curve for Model {i+1}.")
     plt.figure(figsize=(12, 8))
-    plt.plot(history.history['acc']*100, label='Training Accuracy')
-    plt.plot(history.history['val_acc']*100, label='Validation Accuracy')
+    plt.plot(history.history['acc'], label='Training Accuracy')
+    plt.plot(history.history['val_acc'], label='Validation Accuracy')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.title(f'Learning Curve - Model {i+1}')
     plt.legend()
-    plt.grid(True)
+    #plt.grid(True)
 
     plt.savefig(f'artefacts/learning_curve_{i+1}.png')
+    plt.savefig(f'graphs/learning_curve_{i+1}.png')
     plt.close()
 
     logging.info(f"Making predictions on the validation dataset for Model {i+1}.")
@@ -362,17 +403,19 @@ for i, model_fn in enumerate(models):
     val_cm = confusion_matrix(val_true_labels, val_pred_labels)
 
     logging.info(f"Plotting the confusion matrix for Model {i+1}.")
-    plt.figure(figsize=(10, 8))
-    class_labels = sorted(set(val_true_labels.numpy()))
-    disp = ConfusionMatrixDisplay(confusion_matrix=val_cm, display_labels=class_labels)
-    disp.plot(cmap=plt.cm.Blues, ax=plt.gca())
-    plt.title(f'Confusion Matrix - Validation Set - Model {i+1}')
-    plt.savefig(f'artefacts/confusion_matrix_{i+1}.png')
-
-    plt.close()
+    plot_confusion_matrix(val_cm, class_names, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'artefacts/confusion_matrix_{i+1}.png')
+    plot_confusion_matrix(val_cm, class_names, f'Confusion Matrix - Validation Set - Model {i+1}', cmap=plt.cm.Blues, file_name=f'graphs/confusion_matrix_{i+1}.png')
 
     logging.info(f"Saving model weights for Model {i+1}.")
-    model.save_weights(f'artefacts/model_weights_{i+1}.weights.h5')
+    model.save_weights(f'models/model_weights_{i+1}.weights.h5')
+    #model.save_weights(f'models/model_{i+1}.weights.h5')
 
 logging.info("Creating a zip archive of the artefacts directory.")
 shutil.make_archive('artefacts', 'zip', 'artefacts')
+shutil.make_archive('models', 'zip', 'models')
+shutil.make_archive('graphs', 'zip', 'graphs')
+
+
+
+
+    

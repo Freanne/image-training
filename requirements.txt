@@ -5,3 +5,10 @@ keras
 tensorflow
 matplotlib
 scikit-learn
+tqdm
+split_folders
+efficientnet
+seaborn
+fastapi
+uvicorn
+python-multipart

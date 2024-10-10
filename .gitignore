@@ -1,2 +1,6 @@
 models/*
 .DS_Store
+artefacts
+graphs
+splitted*
+confusionmatrix*
