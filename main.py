@@ -386,7 +386,7 @@ for i, model_fn in enumerate(models):
     plt.ylabel('Accuracy')
     plt.title(f'Learning Curve - Model {i+1}')
     plt.legend()
-    plt.grid(True)
+    #plt.grid(True)
 
     plt.savefig(f'artefacts/learning_curve_{i+1}.png')
     plt.savefig(f'graphs/learning_curve_{i+1}.png')
