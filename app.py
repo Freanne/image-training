@@ -13,6 +13,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 image_size = (260, 260)  # Adjust this to match your model's input size
 model = None  # Global variable to hold the model
+os.makedirs("data", exist_ok=True)
+os.makedirs("data/Healthy", exist_ok=True)
+os.makedirs("data/Blight", exist_ok=True)
+os.makedirs("data/Common_Rust", exist_ok=True)
+os.makedirs("data/Gray_Leaf_Spot", exist_ok=True)
 
 def load_best_model():
     global model
