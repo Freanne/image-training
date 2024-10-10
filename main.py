@@ -344,9 +344,10 @@ def plot_confusion_matrix(cm, class_names, title='Confusion matrix', cmap=plt.cm
 models = [
     create_model_0, 
     create_model_0_1, 
-    create_model_1, create_model_2, 
-    create_model_3, create_model_4, create_model_5, 
-    create_model_6
+    create_model_1, 
+    #create_model_2, 
+    #create_model_3, create_model_4, create_model_5, 
+    #create_model_6
     ]
 
 for i, model_fn in enumerate(models):
