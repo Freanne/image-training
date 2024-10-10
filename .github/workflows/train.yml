@@ -99,7 +99,7 @@ jobs:
           run: |
             docker login -u zach27 -p dckr_pat_WGbBhmAkE62bjUhI-HWzROEttdc
             docker buildx build \
-              --platform linux/amd64 \
+              --platform linux/amd64,linux/arm64  \
               --build-arg COMMIT_HASH=${{ env.COMMIT_HASH }} \
               -t zach27/api-corn-disease-detection:${{ env.COMMIT_HASH }} \
               -t zach27/api-corn-disease-detection:latest \
