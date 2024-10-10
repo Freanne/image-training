@@ -86,8 +86,8 @@ jobs:
           with:
             ecr: auto
             logout: true
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+            username: zach27
+            password: dckr_pat_WGbBhmAkE62bjUhI-HWzROEttdc
 
             
         - name: Build API's Docker Image
