@@ -14,6 +14,14 @@ jobs:
       runs-on: ubuntu-latest
   
       steps:
+        - name: Login to Docker Hub
+          uses: docker/login-action@v3
+          with:
+            ecr: auto
+            logout: true
+            username: zach27
+            password: dckr_pat_WGbBhmAkE62bjUhI-HWzROEttdc
+
         - name: Checkout repository
           uses: actions/checkout@v2
   
@@ -81,13 +89,7 @@ jobs:
           id: get_commit
           run: echo "COMMIT_HASH=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_ENV
 
-        - name: Login to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            ecr: auto
-            logout: true
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+        
 
             
         - name: Build API's Docker Image
@@ -98,7 +100,7 @@ jobs:
             docker buildx build \
               --platform linux/amd64 \
               --build-arg COMMIT_HASH=${{ env.COMMIT_HASH }} \
-              -t ${{ secrets.DOCKERHUB_USERNAME }}/api-corn-disease-detection:${{ env.COMMIT_HASH }} \
-              -t ${{ secrets.DOCKERHUB_USERNAME }}/api-corn-disease-detection:latest \
+              -t zach27/api-corn-disease-detection:${{ env.COMMIT_HASH }} \
+              -t zach27/api-corn-disease-detection:latest \
               --push \
               ./
