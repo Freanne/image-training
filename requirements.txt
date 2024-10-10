@@ -9,3 +9,6 @@ tqdm
 split_folders
 efficientnet
 seaborn
+fastapi
+uvicorn
+python-multipart
