@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Copier le code de l’application
 COPY app.py /app
+COPY models/ /app/models
 
 # Stage 2: Runtime stage
 FROM python:3.10-slim
@@ -26,7 +27,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Répertoire de travail
 WORKDIR /app
 
-COPY models/ /app/models
+
 # Copier uniquement les fichiers nécessaires depuis le builder
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
