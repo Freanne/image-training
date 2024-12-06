@@ -1,11 +1,11 @@
 opencv-python 
 numpy 
-pandas
+#pandas
 jax
 keras
 tensorflow
-matplotlib
-seaborn
+#matplotlib
+#seaborn
 fastapi
 uvicorn
 python-multipart
