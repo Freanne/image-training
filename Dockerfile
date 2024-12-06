@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Copier le code de l’application
 COPY app.py /app
-COPY models/ /app/models
+COPY models /app/models
 
 # Stage 2: Runtime stage
 FROM python:3.10-slim
