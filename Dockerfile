@@ -49,7 +49,7 @@ COPY --from=builder /app /app
 EXPOSE 8000
 
 # Healthcheck pour surveiller l’état de l’application
-HEALTHCHECK CMD curl --fail http://localhost:7860/health || exit 1
+# HEALTHCHECK CMD curl --fail http://localhost:7860/health || exit 1
 
 # Commande pour lancer l’application
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
