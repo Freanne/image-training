@@ -9,9 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Installer les dépendances
-COPY requirements.txt .
+COPY requirements-api.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements-api.txt
 
 # Copier le code de l’application
 COPY app.py /app
