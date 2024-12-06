@@ -85,9 +85,9 @@ jobs:
         #     asset_content_type: application/octet-stream
         #   env:
         #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # - name: Extract Commit Hash
-        #   id: get_commit
-        #   run: echo "COMMIT_HASH=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_ENV
+        - name: Extract Commit Hash
+          id: get_commit
+          run: echo "COMMIT_HASH=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_ENV
 
         
 
