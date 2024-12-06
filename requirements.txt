@@ -11,4 +11,5 @@ efficientnet
 seaborn
 fastapi
 uvicorn
+jax
 python-multipart
