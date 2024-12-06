@@ -1,15 +1,11 @@
 opencv-python 
 numpy 
 pandas
+jax
 keras
 tensorflow
 matplotlib
-scikit-learn
-tqdm
-split_folders
-efficientnet
 seaborn
 fastapi
 uvicorn
-jax
 python-multipart
